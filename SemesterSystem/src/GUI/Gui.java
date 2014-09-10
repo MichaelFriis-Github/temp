@@ -3,21 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package GUI;
 
 import Client.ChatClient;
 import Client.ChatList;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  *
  * @author frederikolesen
  */
-public class Gui extends javax.swing.JFrame implements ChatList {
-    
+public class Gui extends javax.swing.JFrame implements ChatList, ActionListener {
+
     ChatClient cc = new ChatClient();
 
     /**
@@ -179,31 +181,33 @@ public class Gui extends javax.swing.JFrame implements ChatList {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
-        try {            
-            cc.connect(jTextFieldHost.getText(),Integer.parseInt(jTextFieldPort.getText()));
+        try {
+            cc.connect(jTextFieldHost.getText(), Integer.parseInt(jTextFieldPort.getText()));
             jTextArea1.setText("Connected as: " + jTextFieldUsername.getText());
         } catch (IOException ex) {
             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
 
     }//GEN-LAST:event_jButtonConnectActionPerformed
 
     private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
         String message = jTextFieldMessage.getText();
         //messageArrived(message);
-        cc.send(jTextFieldUsername.getText()+ ": " +message);
+        cc.send(jTextFieldUsername.getText() + ": " + message);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonSubmitActionPerformed
 
     private void jButtonCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCloseActionPerformed
 
-        try {
-            cc.close();
-        } catch (IOException ex) {
-            Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        cc.closeConnection();
+        Gui.this.dispose();
+
     }//GEN-LAST:event_jButtonCloseActionPerformed
+
+    public void actionPerformed(ActionEvent e) {
+        System.exit(0);
+    }
 
     /**
      * @param args the command line arguments
@@ -247,6 +251,7 @@ public class Gui extends javax.swing.JFrame implements ChatList {
         }
         jTextArea1.setText(text + data);
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClose;
