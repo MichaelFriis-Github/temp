@@ -163,7 +163,7 @@ public class Gui extends javax.swing.JFrame implements ChatList {
 
     private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
         String message = jTextFieldMessage.getText();
-        messageArrived(message);
+        //messageArrived(message);
         cc.send(jTextFieldUsername.getText()+ ": " +message);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonSubmitActionPerformed
