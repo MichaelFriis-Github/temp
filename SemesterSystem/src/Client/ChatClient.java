@@ -6,6 +6,7 @@
 
 package Client;
 
+import Server.ClientHandler;
 import Utils.ProtocolStrings;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -133,6 +134,15 @@ public class ChatClient extends Thread implements ChatList{
     @Override
     public void messageArrived(String data) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+     public void closeConnection()
+    {
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

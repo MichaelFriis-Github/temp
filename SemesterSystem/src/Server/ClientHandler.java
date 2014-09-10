@@ -47,12 +47,5 @@ public class ClientHandler extends Thread {
         writer.println(msg);
     }
     
-    public void closeConnection()
-    {
-        try {
-            socket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
 }
