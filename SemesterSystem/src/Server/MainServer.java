@@ -29,7 +29,7 @@ public class MainServer {
   public static void send(String msg)
   {
       for(ClientHandler c : clients)
-          c.send(msg.toUpperCase());
+          c.send(msg);
   }
   
   public static void removeHandler(ClientHandler ch)

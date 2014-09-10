@@ -30,7 +30,7 @@ public class ClientHandler extends Thread {
             String message = input.nextLine(); //IMPORTANT blocking call
             Logger.getLogger(MainServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message));
             while (!message.equals(ProtocolStrings.STOP)) {
-                writer.println(message.toUpperCase());
+//                writer.println(message.toUpperCase());
                 MainServer.send(message);
                 Logger.getLogger(MainServer.class.getName()).log(Level.INFO, String.format("Received the message: %1$S ", message.toUpperCase()));
                 message = input.nextLine(); //IMPORTANT blocking call
@@ -45,5 +45,14 @@ public class ClientHandler extends Thread {
 
     public void send(String msg) {
         writer.println(msg);
+    }
+    
+    public void closeConnection()
+    {
+        try {
+            socket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
