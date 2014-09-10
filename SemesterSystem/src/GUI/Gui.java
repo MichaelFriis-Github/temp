@@ -7,6 +7,7 @@
 package GUI;
 
 import Client.ChatClient;
+import Client.ChatList;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,15 +16,16 @@ import java.util.logging.Logger;
  *
  * @author frederikolesen
  */
-public class Gui extends javax.swing.JFrame {
-
-    ChatClient cc = new ChatClient();
+public class Gui extends javax.swing.JFrame implements ChatList {
     
+    ChatClient cc = new ChatClient();
+
     /**
      * Creates new form Gui
      */
     public Gui() {
         initComponents();
+        cc.registerEchoListener(this);
     }
 
     /**
@@ -149,20 +151,20 @@ public class Gui extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
-        try {        
+        try {            
             cc.connect(jTextFieldHost.getText(), Integer.parseInt(jTextFieldPort.getText()));
-           jTextArea1.setText("Connected");
+            jTextArea1.setText("Connected as: " + jTextFieldUsername.getText());
         } catch (IOException ex) {
             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
         }
-         
-       
+        
+
     }//GEN-LAST:event_jButtonConnectActionPerformed
 
     private void jButtonSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSubmitActionPerformed
         String message = jTextFieldMessage.getText();
         messageArrived(message);
-        cc.send(message);
+        cc.send(jTextFieldUsername.getText()+ ": " +message);
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonSubmitActionPerformed
 
@@ -200,11 +202,12 @@ public class Gui extends javax.swing.JFrame {
             }
         });
     }
-    public void messageArrived(String data)
-    {
+
+    public void messageArrived(String data) {
         String text = jTextArea1.getText();
-        if(!text.isEmpty())
+        if (!text.isEmpty()) {
             text += "\n";
+        }
         jTextArea1.setText(text + data);
     }
 
