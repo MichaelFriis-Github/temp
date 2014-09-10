@@ -12,4 +12,6 @@ package Client;
  */
 public interface ChatList {
     void messageArrived(String	data);
+    
+    void usernameArrived(String username);
 }

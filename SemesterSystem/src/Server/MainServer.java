@@ -32,6 +32,14 @@ public class MainServer {
           c.send(msg);
   }
   
+  public static void sendusername(String username)
+  {
+      for(ClientHandler p : clients)
+      {
+          p.sendusername(username);
+      }
+  }
+  
   public static void removeHandler(ClientHandler ch)
   {
       clients.remove(ch);

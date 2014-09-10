@@ -182,7 +182,8 @@ public class Gui extends javax.swing.JFrame implements ChatList, ActionListener 
 
     private void jButtonConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonConnectActionPerformed
         try {
-            cc.connect(jTextFieldHost.getText(), Integer.parseInt(jTextFieldPort.getText()));
+            cc.connect(jTextFieldHost.getText(), jTextFieldUsername.getText(), Integer.parseInt(jTextFieldPort.getText()));
+            cc.sendusername(jTextFieldUsername.getText());
             jTextArea1.setText("Connected as: " + jTextFieldUsername.getText());
         } catch (IOException ex) {
             Logger.getLogger(Gui.class.getName()).log(Level.SEVERE, null, ex);
@@ -251,7 +252,13 @@ public class Gui extends javax.swing.JFrame implements ChatList, ActionListener 
         }
         jTextArea1.setText(text + data);
     }
-
+public void UsernameArrived(String data) {
+        String text = jTextArea2.getText();
+        if (!text.isEmpty()) {
+            text += "\n";
+        }
+        jTextArea2.setText(text + data);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonClose;
@@ -271,4 +278,9 @@ public class Gui extends javax.swing.JFrame implements ChatList, ActionListener 
     private javax.swing.JTextField jTextFieldPort;
     private javax.swing.JTextField jTextFieldUsername;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void usernameArrived(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

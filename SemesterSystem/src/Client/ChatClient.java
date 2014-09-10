@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Client;
 
 import Server.ClientHandler;
@@ -23,23 +22,30 @@ import java.util.logging.Logger;
  *
  * @author frederikolesen
  */
-public class ChatClient extends Thread implements ChatList{
-    
+public class ChatClient extends Thread implements ChatList {
+
     Socket socket;
     private int port;
     private InetAddress serverAddress;
     private Scanner input;
     private PrintWriter output;
+    private String cusername;
     List<ChatList> listeners = new ArrayList();
     ChatList cl = new ChatList() {
-        
+
         @Override
         public void messageArrived(String data) {
             System.out.println("Message arrived" + data);
         }
+
+        @Override
+        public void usernameArrived(String username) {
+            System.out.println("Username Arrived" + username);
+        }
     };
-    
-    public void connect(String address, int port) throws UnknownHostException, IOException {
+
+    public void connect(String address, String username, int port) throws UnknownHostException, IOException {
+        cusername = username;
         this.port = port;
         serverAddress = InetAddress.getByName(address);
         socket = new Socket(serverAddress, port);
@@ -47,34 +53,44 @@ public class ChatClient extends Thread implements ChatList{
         output = new PrintWriter(socket.getOutputStream(), true);  //Set to true, to get auto flush behaviour
         start();
     }
-    
+
     public void registerEchoListener(ChatList l) {
         listeners.add(l);
     }
-    
+
     ;
   
   public void unRegisterEchoListener(ChatList l) {
         listeners.remove(l);
     }
-    
+
     ;
   
   private void notifyListeners(String msg) {
-      for (ChatList l : listeners)
-        {
+        for (ChatList l : listeners) {
             l.messageArrived(msg);
         }
+
     }
-    
+
+    private void notifyUsernamesToList(String username) {
+        for (ChatList l : listeners) {
+            l.usernameArrived(username);
+        }
+    }
+
     public void send(String msg) {
         output.println(msg);
     }
-    
+
+    public void sendusername(String username) {
+        output.println(username);
+    }
+
     public void close() throws IOException {
         output.println(ProtocolStrings.STOP);
     }
-    
+
     public String receive() {
         String msg = input.nextLine();
         if (msg.equals(ProtocolStrings.STOP)) {
@@ -86,7 +102,7 @@ public class ChatClient extends Thread implements ChatList{
         }
         return msg;
     }
-    
+
     public static void main(String[] args) {
         int port = 9090;
         String ip = "localhost";
@@ -94,35 +110,21 @@ public class ChatClient extends Thread implements ChatList{
             port = Integer.parseInt(args[0]);
             ip = args[1];
         }
-        try {
-            ChatClient tester = new ChatClient();
-            tester.registerEchoListener(new ChatList() {
 
-                @Override
-                public void messageArrived(String data) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-            });
-            
-            tester.connect(ip, port);
-            System.out.println("Sending 'Hello world'");
-            tester.send("Hello World");
-            System.out.println("Waiting for a reply");
-            tester.close();
-            //System.in.read();      
-        } catch (UnknownHostException ex) {
-            Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(ChatClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
-    
-    @Override
+
     public void run() {
         String msg = input.nextLine();
+        String username = input.nextLine();
         while (!msg.equals(ProtocolStrings.STOP)) {
             notifyListeners(msg);
+
             msg = input.nextLine();
+        }
+        while (!username.equals(ProtocolStrings.STOP)) {
+            notifyUsernamesToList(username);
+
+            username = input.nextLine();
         }
         try {
             socket.close();
@@ -131,18 +133,22 @@ public class ChatClient extends Thread implements ChatList{
         }
     }
 
-    @Override
-    public void messageArrived(String data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
-     public void closeConnection()
-    {
+    public void closeConnection() {
         try {
             socket.close();
         } catch (IOException ex) {
             Logger.getLogger(ClientHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void usernameArrived(String username) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void messageArrived(String data) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }
