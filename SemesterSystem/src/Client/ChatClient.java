@@ -60,8 +60,9 @@ public class ChatClient extends Thread implements ChatList{
     ;
   
   private void notifyListeners(String msg) {
-        for (int i = 0; i < listeners.size(); i++) {
-            cl.messageArrived(msg);
+      for (ChatList l : listeners)
+        {
+            l.messageArrived(msg);
         }
     }
     
