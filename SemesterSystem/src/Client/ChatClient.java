@@ -34,7 +34,7 @@ public class ChatClient extends Thread implements ChatList{
         
         @Override
         public void messageArrived(String data) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            System.out.println("Message arrived" + data);
         }
     };
     
@@ -133,4 +133,5 @@ public class ChatClient extends Thread implements ChatList{
     public void messageArrived(String data) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
 }
